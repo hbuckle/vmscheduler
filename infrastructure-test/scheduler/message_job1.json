@@ -1,0 +1,7 @@
+{
+  "resourceGroupIds": [
+    ""
+  ],
+  "virtualMachineIds": [],
+  "action": "stop"
+}
