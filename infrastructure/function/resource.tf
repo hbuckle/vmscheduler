@@ -36,12 +36,7 @@ resource "azurerm_function_app" "function_app" {
   app_service_plan_id       = "${azurerm_app_service_plan.app_service_plan.id}"
   storage_connection_string = "${azurerm_storage_account.storage_account.primary_connection_string}"
   version                   = "~2"
-
-  app_settings {
-    queue_scheduler       = "${var.queue_scheduler_connection}"
-    queue_start           = "${var.queue_start_connection}"
-    queue_stop            = "${var.queue_stop_connection}"
-  }
+  app_settings              = "${var.app_settings}"
 
   identity {
     type = "SystemAssigned"

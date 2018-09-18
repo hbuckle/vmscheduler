@@ -12,11 +12,11 @@ using Microsoft.Azure.Services.AppAuthentication;
 
 namespace function
 {
-  public static class stopvm
+  public static class startvm
   {
-    [FunctionName("stopvm")]
+    [FunctionName("startvm")]
     public static void Run(
-      [QueueTrigger("stop", Connection = "queue_stop")]
+      [QueueTrigger("start", Connection = "queue_start")]
       String vmId,
       ILogger log
     )
@@ -34,7 +34,7 @@ namespace function
             .WithDefaultSubscription();
         var parsed = ResourceId.FromString(vmId);
         var vm = azure.VirtualMachines.GetById(vmId);
-        vm.Deallocate();
+        vm.Start();
       }
       catch(Exception e)
       {
