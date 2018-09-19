@@ -1,5 +1,9 @@
 {
-  "resourceGroupIds": [],
+  "resourceGroupIds": [
+    "group1",
+    "group2",
+    "group3"
+  ],
   "virtualMachineIds": [],
   "action": "stop"
 }
