@@ -13,21 +13,29 @@ using Microsoft.Azure.Services.AppAuthentication;
 
 namespace function
 {
-  public class CustomQueueMessage
+  public class Schedule
   {
-    public string Action { get; set; }
-    public string ResourceGroupId { get; set; }
+    public String Id { get; set; }
+    public String Name { get; set; }
+    public String Action { get; set; }
+    public String Recurrence { get; set; }
+    public IEnumerable<String> ResourceGroupIds { get; set; }
+    public IEnumerable<String> VirtualMachineIds { get; set; }
   }
 
   public static class Methods
   {
+    public static JObject ConvertBase64JsonString(String input)
+    {
+      UTF8Encoding utf8 = new UTF8Encoding();
+      String json = utf8.GetString(Convert.FromBase64String(input));
+      return JObject.Parse(json);
+    }
     public static JObject ConvertSchedulerXml(String xml)
     {
       XDocument doc = XDocument.Parse(xml);
       String message = doc.Element("StorageQueueMessage").Element("Message").Value;
-      UTF8Encoding utf8 = new UTF8Encoding();
-      String json = utf8.GetString(Convert.FromBase64String(message));
-      return JObject.Parse(json);
+      return ConvertBase64JsonString(message);
     }
     public static List<String> GetResourceGroupVms(String resourceGroupId)
     {
@@ -49,5 +57,9 @@ namespace function
       }
       return result;
     }
+    public static AzureCredentials GetAzureCredentials() => SdkContext.AzureCredentialsFactory.FromMSI(
+      new MSILoginInformation(MSIResourceType.AppService),
+      AzureEnvironment.AzureGlobalCloud
+    );
   }
 }

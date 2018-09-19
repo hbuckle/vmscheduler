@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -20,16 +21,19 @@ namespace function
     [FunctionName("getresourcegroups")]
     public static IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]HttpRequest req, ILogger log)
     {
-      var credentials = SdkContext.AzureCredentialsFactory.FromMSI(
-        new MSILoginInformation(MSIResourceType.AppService),
-        AzureEnvironment.AzureGlobalCloud
-      );
+      var credentials = Methods.GetAzureCredentials();
       var azure = Azure
             .Configure()
             .WithLogLevel(HttpLoggingDelegatingHandler.Level.Basic)
             .Authenticate(credentials)
             .WithDefaultSubscription();
-      var result = azure.ResourceGroups.List();
+      var result = azure.ResourceGroups.List()
+        .Select(rg => new
+        {
+          Name = rg.Name,
+          Id = rg.Id
+        }
+      );
       return (ActionResult)new JsonResult(result);
     }
   }

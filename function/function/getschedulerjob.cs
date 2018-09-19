@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -20,29 +21,39 @@ namespace function
   public static class getschedulerjob
   {
     [FunctionName("getschedulerjob")]
-    public static IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]HttpRequest req, ILogger log, ExecutionContext context)
+    public static IActionResult Run(
+      [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]
+      HttpRequest req,
+      ILogger log,
+      ExecutionContext context
+    )
     {
-      log.LogInformation("getschedulerjob called");
       var config = new ConfigurationBuilder()
         .SetBasePath(context.FunctionAppDirectory)
         .AddEnvironmentVariables()
         .Build();
-      var credentials = SdkContext.AzureCredentialsFactory.FromMSI(
-        new MSILoginInformation(MSIResourceType.AppService),
-        AzureEnvironment.AzureGlobalCloud
-      );
-      var azure = Azure
-            .Configure()
-            .WithLogLevel(HttpLoggingDelegatingHandler.Level.Basic)
-            .Authenticate(credentials)
-            .WithDefaultSubscription();
+      var credentials = Methods.GetAzureCredentials();
       SchedulerManagementClient schedulerManagementClient = new SchedulerManagementClient(
         credentials
       );
-      schedulerManagementClient.SubscriptionId = azure.SubscriptionId;
       var parsed = ResourceId.FromString(config["scheduler_job_collection_id"]);
+      schedulerManagementClient.SubscriptionId = parsed.SubscriptionId;
       var jobs = schedulerManagementClient.Jobs.List(parsed.ResourceGroupName, parsed.Name);
-      var result = jobs.AsContinuousCollection(x => schedulerManagementClient.Jobs.ListNext(x));
+      var alljobs = jobs.AsContinuousCollection(x => schedulerManagementClient.Jobs.ListNext(x));
+      var result = new List<Schedule>();
+      foreach (var job in alljobs)
+      {
+        var message = Methods.ConvertBase64JsonString(job.Properties.Action.QueueMessage.Message);
+        result.Add(new Schedule()
+        {
+          Id = job.Id,
+          Name = job.Name.Split('/')[1],
+          Action = (String)message["action"],
+          Recurrence = JsonConvert.SerializeObject(job.Properties.Recurrence),
+          ResourceGroupIds = message["resourceGroupIds"].Values<string>(),
+          VirtualMachineIds = message["virtualMachineIds"].Values<string>()
+        });
+      }
       return (ActionResult)new JsonResult(result);
     }
   }

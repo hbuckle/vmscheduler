@@ -23,10 +23,7 @@ namespace function
     {
       try {
         log.LogInformation(vmId);
-        var credentials = SdkContext.AzureCredentialsFactory.FromMSI(
-          new MSILoginInformation(MSIResourceType.AppService),
-          AzureEnvironment.AzureGlobalCloud
-        );
+        var credentials = Methods.GetAzureCredentials();
         var azure = Azure
             .Configure()
             .WithLogLevel(HttpLoggingDelegatingHandler.Level.Basic)
