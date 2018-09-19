@@ -3,7 +3,7 @@
   <li *ngFor="let schedule of schedules"
     [class.selected]="schedule === selectedSchedule"
     (click)="onSelect(schedule)">
-    <span class="badge">{{schedule.id}}</span> {{schedule.name}}
+    <span class="badge">{{schedule.name}}</span> {{schedule.action}}
   </li>
 </ul>
 <app-schedule-detail [schedule]="selectedSchedule"></app-schedule-detail>

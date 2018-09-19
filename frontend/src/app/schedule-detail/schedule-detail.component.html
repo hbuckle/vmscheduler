@@ -1,10 +1,18 @@
-<div *ngIf="schedule">
- 
+<div *ngIf="schedule" class="schedule-detail">
   <h2>{{schedule.name | uppercase}} Details</h2>
-  <div><span>id: </span>{{schedule.id}}</div>
+  <div><span>action: </span>{{schedule.action}}</div>
   <div>
-    <label>name:
-      <input [(ngModel)]="schedule.name" placeholder="name">
+    <label>recurrence:
+      <!-- <input [(ngModel)]="schedule.recurrence"> -->
+      <textarea [(ngModel)]="schedule.recurrence" ></textarea>
     </label>
+  </div>
+  <div>
+    <h3>Resource Groups</h3>
+    <ul>
+      <li *ngFor="let rg of schedule.resourceGroupIds">
+        <span class="badge">{{rg}}</span>
+      </li>
+    </ul>
   </div>
 </div>
