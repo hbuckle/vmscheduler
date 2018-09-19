@@ -43,8 +43,37 @@ resource "azurerm_function_app" "function_app" {
   }
 }
 
-resource "azurerm_role_assignment" "role_assignment" {
+resource "azurerm_role_definition" "role_definition" {
+  name  = "VirtualMachinePower"
+  scope = "${data.azurerm_subscription.subscription.id}"
+
+  permissions {
+    actions = [
+      "Microsoft.Authorization/*/read",
+      "Microsoft.Resources/subscriptions/resourceGroups/read",
+      "Microsoft.Compute/virtualMachines/read",
+      "Microsoft.Compute/virtualMachines/instanceView/read",
+      "Microsoft.Compute/virtualMachines/deallocate/action",
+      "Microsoft.Compute/virtualMachines/start/action",
+      "Microsoft.Compute/virtualMachines/restart/action",
+    ]
+
+    not_actions = []
+  }
+
+  assignable_scopes = [
+    "${data.azurerm_subscription.subscription.id}",
+  ]
+}
+
+resource "azurerm_role_assignment" "role_assignment_scheduler_job_collection" {
+  scope              = "${var.scheduler_job_collection_id}"
+  role_definition_id = "${data.azurerm_subscription.subscription.id}${data.azurerm_builtin_role_definition.builtin_role_definition_owner.id}"
+  principal_id       = "${azurerm_function_app.function_app.identity.0.principal_id}"
+}
+
+resource "azurerm_role_assignment" "role_assignment_virtual_machine_power" {
   scope              = "${data.azurerm_subscription.subscription.id}"
-  role_definition_id = "${data.azurerm_subscription.subscription.id}${data.azurerm_builtin_role_definition.builtin_role_definition.id}"
+  role_definition_id = "${azurerm_role_definition.role_definition.id}"
   principal_id       = "${azurerm_function_app.function_app.identity.0.principal_id}"
 }
