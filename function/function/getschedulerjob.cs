@@ -28,33 +28,42 @@ namespace function
       ExecutionContext context
     )
     {
-      var config = new ConfigurationBuilder()
-        .SetBasePath(context.FunctionAppDirectory)
-        .AddEnvironmentVariables()
-        .Build();
-      var credentials = Methods.GetAzureCredentials();
-      SchedulerManagementClient schedulerManagementClient = new SchedulerManagementClient(
-        credentials
-      );
-      var parsed = ResourceId.FromString(config["scheduler_job_collection_id"]);
-      schedulerManagementClient.SubscriptionId = parsed.SubscriptionId;
-      var jobs = schedulerManagementClient.Jobs.List(parsed.ResourceGroupName, parsed.Name);
-      var alljobs = jobs.AsContinuousCollection(x => schedulerManagementClient.Jobs.ListNext(x));
-      var result = new List<Schedule>();
-      foreach (var job in alljobs)
+      try
       {
-        var message = Methods.ConvertBase64JsonString(job.Properties.Action.QueueMessage.Message);
-        result.Add(new Schedule()
+        var config = new ConfigurationBuilder()
+          .SetBasePath(context.FunctionAppDirectory)
+          .AddEnvironmentVariables()
+          .Build();
+        var credentials = Methods.GetAzureCredentials();
+        SchedulerManagementClient schedulerManagementClient = new SchedulerManagementClient(
+          credentials
+        );
+        var parsed = ResourceId.FromString(config["scheduler_job_collection_id"]);
+        schedulerManagementClient.SubscriptionId = parsed.SubscriptionId;
+        var jobs = schedulerManagementClient.Jobs.List(parsed.ResourceGroupName, parsed.Name);
+        var alljobs = jobs.AsContinuousCollection(x => schedulerManagementClient.Jobs.ListNext(x));
+        var result = new List<Schedule>();
+        foreach (var job in alljobs)
         {
-          Id = job.Id,
-          Name = job.Name.Split('/')[1],
-          Action = (String)message["action"],
-          Recurrence = JsonConvert.SerializeObject(job.Properties.Recurrence),
-          ResourceGroupIds = message["resourceGroupIds"].Values<string>(),
-          VirtualMachineIds = message["virtualMachineIds"].Values<string>()
-        });
+          var message = Methods.ConvertBase64JsonString(job.Properties.Action.QueueMessage.Message);
+          result.Add(new Schedule()
+          {
+            Id = job.Id,
+            Name = job.Name.Split('/')[1],
+            Action = (String)message["action"],
+            Recurrence = JsonConvert.SerializeObject(job.Properties.Recurrence, Formatting.Indented),
+            ResourceGroupIds = message["resourceGroupIds"].Values<string>(),
+            VirtualMachineIds = message["virtualMachineIds"].Values<string>()
+          });
+        }
+        return (ActionResult)new JsonResult(result);
       }
-      return (ActionResult)new JsonResult(result);
+      catch(Exception e)
+      {
+        log.LogError(e.Message);
+        log.LogError(e.StackTrace);
+        throw e;
+      }
     }
   }
 }

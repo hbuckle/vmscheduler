@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.Azure;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.Azure.Management.Compute.Fluent;
 using Microsoft.Azure.Management.Compute.Fluent.Models;
 using Microsoft.Azure.Management.Fluent;
@@ -21,6 +24,21 @@ namespace function
     public String Recurrence { get; set; }
     public IEnumerable<String> ResourceGroupIds { get; set; }
     public IEnumerable<String> VirtualMachineIds { get; set; }
+  }
+  public class ScheduleMessage
+  {
+    [JsonProperty(Required = Required.Always)]
+    public String action { get; set; }
+    [JsonProperty(Required = Required.Always)]
+    public IEnumerable<String> resourceGroupIds { get; set; }
+    [JsonProperty(Required = Required.Always)]
+    public IEnumerable<String> virtualMachineIds { get; set; }
+    public String ToBase64JsonString()
+    {
+      String json = JsonConvert.SerializeObject(this);
+      UTF8Encoding utf8 = new UTF8Encoding();
+      return Convert.ToBase64String(utf8.GetBytes(json));
+    }
   }
 
   public static class Methods
@@ -61,5 +79,34 @@ namespace function
       new MSILoginInformation(MSIResourceType.AppService),
       AzureEnvironment.AzureGlobalCloud
     );
+    public static String GetQueueSasToken(String connectionString)
+    {
+      CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
+      SharedAccessAccountPolicy policy = new SharedAccessAccountPolicy()
+      {
+        Permissions =
+          SharedAccessAccountPermissions.Read |
+          SharedAccessAccountPermissions.Write |
+          SharedAccessAccountPermissions.Delete |
+          SharedAccessAccountPermissions.Add |
+          SharedAccessAccountPermissions.Create |
+          SharedAccessAccountPermissions.ProcessMessages |
+          SharedAccessAccountPermissions.Update |
+          SharedAccessAccountPermissions.List,
+        Services = SharedAccessAccountServices.Queue,
+        ResourceTypes =
+          SharedAccessAccountResourceTypes.Service |
+          SharedAccessAccountResourceTypes.Container |
+          SharedAccessAccountResourceTypes.Object,
+        SharedAccessExpiryTime = DateTime.UtcNow.AddYears(1),
+        Protocols = SharedAccessProtocol.HttpsOnly
+      };
+      return account.GetSharedAccessSignature(policy);
+    }
+    public static String GetStorageAccountName(String connectionString)
+    {
+      CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
+      return account.QueueEndpoint.Host.Split('.')[0];
+    }
   }
 }
