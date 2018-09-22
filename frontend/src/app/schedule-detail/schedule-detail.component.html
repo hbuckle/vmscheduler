@@ -1,16 +1,16 @@
 <div *ngIf="schedule" class="schedule-detail">
-  <h2>{{schedule.name | uppercase}} Details</h2>
-  <div><span>action: </span>{{schedule.action}}</div>
+  <h2>{{schedule.Name | uppercase}} Details</h2>
+  <div><span>action: </span>{{schedule.Message.Action}}</div>
   <div>
     <label>recurrence:
       <!-- <input [(ngModel)]="schedule.recurrence"> -->
-      <textarea [(ngModel)]="schedule.recurrence" ></textarea>
+      <textarea [ngModel]="schedule.Recurrence | json" (ngModelChange)="schedule.Recurrence=$event" cols="30" rows="20" ></textarea>
     </label>
   </div>
   <div>
     <h3>Resource Groups</h3>
     <ul>
-      <li *ngFor="let rg of schedule.resourceGroupIds">
+      <li *ngFor="let rg of schedule.Message.ResourceGroupIds">
         <span class="badge">{{rg}}</span>
       </li>
     </ul>
