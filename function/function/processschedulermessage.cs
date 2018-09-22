@@ -22,21 +22,20 @@ namespace function
     {
       try {
         log.LogInformation(xml);
-        JObject message = Methods.ConvertSchedulerXml(xml);
-        String action = (String)message["action"];
-        log.LogInformation(action);
+        var scheduleMessage = Methods.ConvertSchedulerXml(xml);
+        log.LogInformation(scheduleMessage.Action);
         List<String> vms = new List<string>();
-        foreach (String resourceGroupId in message["resourceGroupIds"])
+        foreach (String resourceGroupId in scheduleMessage.ResourceGroupIds)
         {
           log.LogInformation(resourceGroupId);
           vms.AddRange(Methods.GetResourceGroupVms(resourceGroupId));
         }
-        foreach (String vmId in message["virtualMachineIds"])
+        foreach (String vmId in scheduleMessage.VirtualMachineIds)
         {
           log.LogInformation(vmId);
           vms.Add(vmId);
         }
-        switch (action)
+        switch (scheduleMessage.Action.ToLower())
         {
           case "start":
             foreach (String vm in vms)

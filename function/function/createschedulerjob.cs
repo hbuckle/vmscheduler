@@ -40,17 +40,17 @@ namespace function
         SchedulerManagementClient schedulerManagementClient = new SchedulerManagementClient(
           credentials
         );
-        ScheduleMessage scheduleMessage;
+        Schedule schedule;
         using (var reader = new StreamReader(req.Body))
         {
           try
           {
             var body = reader.ReadToEnd();
             log.LogInformation(body);
-            scheduleMessage = JsonConvert.DeserializeObject(
+            schedule = JsonConvert.DeserializeObject(
               body,
-              (new ScheduleMessage()).GetType()
-            ) as ScheduleMessage;
+              (new Schedule()).GetType()
+            ) as Schedule;
           }
           catch(Newtonsoft.Json.JsonException q)
           {
@@ -59,11 +59,16 @@ namespace function
         }
         var parsed = ResourceId.FromString(config["scheduler_job_collection_id"]);
         schedulerManagementClient.SubscriptionId = parsed.SubscriptionId;
+        var definition = CreateJobDefinition(
+          config["queue_scheduler"],
+          schedule.Message.ToBase64JsonString(),
+          schedule.Recurrence
+        );
         schedulerManagementClient.Jobs.CreateOrUpdate(
           parsed.ResourceGroupName,
           parsed.Name,
           name,
-          CreateJobDefinition(config["queue_scheduler"], scheduleMessage.ToBase64JsonString())
+          definition
         );
         return (ActionResult)new OkResult();
       }
@@ -75,7 +80,7 @@ namespace function
         throw e;
       }
     }
-    private static JobDefinition CreateJobDefinition(String connection, String message)
+    private static JobDefinition CreateJobDefinition(String connection, String message, JobRecurrence recurrence)
     {
       var jobDefinition = new JobDefinition();
       jobDefinition.Properties = new JobProperties();
@@ -87,6 +92,7 @@ namespace function
       jobDefinition.Properties.Action.QueueMessage.SasToken = Methods.GetQueueSasToken(connection);
       jobDefinition.Properties.Action.QueueMessage.Message = message;
       jobDefinition.Properties.StartTime = DateTime.UtcNow.AddYears(-1);
+      jobDefinition.Properties.Recurrence = recurrence;
       return jobDefinition;
     }
   }

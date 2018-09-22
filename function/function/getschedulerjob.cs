@@ -45,16 +45,41 @@ namespace function
         var result = new List<Schedule>();
         foreach (var job in alljobs)
         {
-          var message = Methods.ConvertBase64JsonString(job.Properties.Action.QueueMessage.Message);
-          result.Add(new Schedule()
+          var encodedMessage = job.Properties?.Action?.QueueMessage?.Message;
+          ScheduleMessage scheduleMessage = new ScheduleMessage();
+          try
+          {
+            if (!String.IsNullOrEmpty(encodedMessage))
+            {
+              var message = Methods.ConvertBase64String(encodedMessage);
+              scheduleMessage = JsonConvert.DeserializeObject(
+                message,
+                (new ScheduleMessage()).GetType()
+              ) as ScheduleMessage;
+            }
+            else
+            {
+              scheduleMessage.BlankMessage();
+            }
+          }
+          catch (FormatException f)
+          {
+            log.LogInformation($"Could not decode scheduler job message: {f.Message}");
+            scheduleMessage.BlankMessage();
+          }
+          catch(Newtonsoft.Json.JsonException j)
+          {
+            log.LogInformation($"Could not deserialize scheduler job message: {j.Message}");
+            scheduleMessage.BlankMessage();
+          }
+          var schedule = new Schedule()
           {
             Id = job.Id,
             Name = job.Name.Split('/')[1],
-            Action = (String)message["action"],
-            Recurrence = JsonConvert.SerializeObject(job.Properties.Recurrence, Formatting.Indented),
-            ResourceGroupIds = message["resourceGroupIds"].Values<string>(),
-            VirtualMachineIds = message["virtualMachineIds"].Values<string>()
-          });
+            Recurrence = job.Properties.Recurrence,
+            Message = scheduleMessage
+          };
+          result.Add(schedule);
         }
         return (ActionResult)new JsonResult(result);
       }
