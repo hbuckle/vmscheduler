@@ -41,6 +41,10 @@ resource "azurerm_function_app" "function_app" {
   identity {
     type = "SystemAssigned"
   }
+
+  provisioner "local-exec" {
+    command = "az functionapp cors add -g ${azurerm_resource_group.resource_group.name} -n ${random_string.random_string.result} --allowed-origins http://localhost:4200"
+  }
 }
 
 resource "azurerm_role_definition" "role_definition" {
