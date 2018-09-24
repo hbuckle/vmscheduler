@@ -74,18 +74,18 @@ namespace function
           }
           var schedule = new Schedule()
           {
-            Id = job.Id,
-            Name = job.Name.Split('/')[1],
-            Message = scheduleMessage
+            id = job.Id,
+            name = job.Name.Split('/')[1],
+            message = scheduleMessage
           };
           if (job.Properties.Recurrence == null)
           {
-            schedule.Recurrence = new Microsoft.Azure.Management.Scheduler.Models.JobRecurrence();
-            schedule.Recurrence.Schedule = new Microsoft.Azure.Management.Scheduler.Models.JobRecurrenceSchedule();
+            schedule.recurrence = new Microsoft.Azure.Management.Scheduler.Models.JobRecurrence();
+            schedule.recurrence.Schedule = new Microsoft.Azure.Management.Scheduler.Models.JobRecurrenceSchedule();
           }
           else
           {
-            schedule.Recurrence = job.Properties.Recurrence;
+            schedule.recurrence = job.Properties.Recurrence;
           }
           result.Add(schedule);
         }
