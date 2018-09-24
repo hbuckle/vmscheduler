@@ -1,10 +1,10 @@
 {
-  "ResourceGroupIds": [
+  "resourceGroupIds": [
     "group1",
     "group2",
     "group3"
   ],
-  "VirtualMachineIds": [],
-  "Tags": [],
-  "Action": "stop"
+  "virtualMachineIds": [],
+  "tags": [],
+  "action": "stop"
 }
