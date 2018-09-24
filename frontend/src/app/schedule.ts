@@ -1,6 +1,11 @@
+import { JobRecurrence } from './jobrecurrence';
+import { ScheduleMessage } from './schedulemessage';
+
 export class Schedule {
-  Id: string;
-  Name: string;
-  Recurrence: object;
-  Message: object;
+  constructor(
+    public id: string,
+    public name: string,
+    public recurrence: JobRecurrence,
+    public message: ScheduleMessage,
+  ) {}
 }

@@ -1,17 +1,64 @@
 <div *ngIf="schedule" class="schedule-detail">
-  <h2>{{schedule.Name | uppercase}} Details</h2>
-  <div><span>action: </span>{{schedule.Message.Action}}</div>
+  <h2>{{schedule.name}}</h2>
   <div>
-    <label>recurrence:
-      <!-- <input [(ngModel)]="schedule.recurrence"> -->
-      <textarea [ngModel]="schedule.Recurrence | json" (ngModelChange)="schedule.Recurrence=$event" cols="30" rows="20" ></textarea>
-    </label>
+    <h3>Recurrence</h3>
+    <div>
+      <label>Frequency:
+        <select [(ngModel)]="schedule.recurrence.frequency" >
+          <option> Minute </option>
+          <option> Hour </option>
+          <option> Day </option>
+          <option> Week </option>
+          <option> Month </option>
+        </select>
+      </label>
+    </div>
+    <div>
+      <label>Interval:
+        <input [(ngModel)]="schedule.recurrence.interval">
+      </label>
+    </div>
+    <div>
+      <h4>Recurrence Schedule</h4>
+      <h5>Week Days</h5>
+      <ul>
+        <li *ngFor="let wd of schedule.recurrence.schedule.weekDays">
+          <span class="badge">{{wd}}</span>
+        </li>
+      </ul>
+      <h5>Hours</h5>
+      <ul>
+        <li *ngFor="let hr of schedule.recurrence.schedule.hours">
+          <span class="badge">{{hr}}</span>
+        </li>
+      </ul>
+      <h5>Minutes</h5>
+      <ul>
+        <li *ngFor="let mn of schedule.recurrence.schedule.minutes">
+          <span class="badge">{{mn}}</span>
+        </li>
+      </ul>
+    </div>
   </div>
   <div>
-    <h3>Resource Groups</h3>
+    <h3>Message</h3>
+    <div><span>Action: </span>{{schedule.message.action}}</div>
+    <h4>Resource Groups</h4>
     <ul>
-      <li *ngFor="let rg of schedule.Message.ResourceGroupIds">
+      <li *ngFor="let rg of schedule.message.resourceGroupIds">
         <span class="badge">{{rg}}</span>
+      </li>
+    </ul>
+    <h4>Virtual Machines</h4>
+    <ul>
+      <li *ngFor="let vm of schedule.message.virtualMachineIds">
+        <span class="badge">{{vm}}</span>
+      </li>
+    </ul>
+    <h4>Tags</h4>
+    <ul>
+      <li *ngFor="let tag of schedule.message.tags">
+        <span class="badge">{{tag}}</span>
       </li>
     </ul>
   </div>

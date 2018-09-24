@@ -5,15 +5,17 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { SchedulesComponent } from './schedules/schedules.component';
-import { MessagesComponent } from './messages/messages.component';
+import { LogMessagesComponent } from './logmessages/logmessages.component';
 import { ScheduleDetailComponent } from './schedule-detail/schedule-detail.component';
+import { ScheduleFormComponent } from './schedule-form/schedule-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SchedulesComponent,
-    MessagesComponent,
-    ScheduleDetailComponent
+    LogMessagesComponent,
+    ScheduleDetailComponent,
+    ScheduleFormComponent
   ],
   imports: [
     BrowserModule,

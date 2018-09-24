@@ -1,9 +1,13 @@
 <h2>Schedules</h2>
-<ul class="schedules">
-  <li *ngFor="let schedule of schedules"
-    [class.selected]="schedule === selectedSchedule"
-    (click)="onSelect(schedule)">
-    <span class="badge">{{schedule.Name}}</span> {{schedule.Message.Action}}
-  </li>
-</ul>
-<app-schedule-detail [schedule]="selectedSchedule"></app-schedule-detail>
+<div class="schedules">
+  <section>
+    <ul>
+      <li *ngFor="let schedule of schedules"
+        [class.selected]="schedule === selectedSchedule"
+        (click)="onSelect(schedule)">
+        <span class="badge">{{schedule.name}}</span><span> {{schedule.message.action}}</span>
+      </li>
+    </ul>
+    <app-schedule-form class="app-schedule-detail" [schedule]="selectedSchedule"></app-schedule-form>
+  </section>
+</div>
