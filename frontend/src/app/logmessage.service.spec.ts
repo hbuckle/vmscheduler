@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MessageService } from './message.service';
+import { LogMessageService } from './logmessage.service';
 
-describe('MessageService', () => {
+describe('LogMessageService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MessageService = TestBed.get(MessageService);
+    const service: LogMessageService = TestBed.get(LogMessageService);
     expect(service).toBeTruthy();
   });
 });
