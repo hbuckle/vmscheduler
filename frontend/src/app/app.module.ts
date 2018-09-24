@@ -8,6 +8,7 @@ import { SchedulesComponent } from './schedules/schedules.component';
 import { LogMessagesComponent } from './logmessages/logmessages.component';
 import { ScheduleDetailComponent } from './schedule-detail/schedule-detail.component';
 import { ScheduleFormComponent } from './schedule-form/schedule-form.component';
+import { DaypickerComponent } from './daypicker/daypicker.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ScheduleFormComponent } from './schedule-form/schedule-form.component';
     SchedulesComponent,
     LogMessagesComponent,
     ScheduleDetailComponent,
-    ScheduleFormComponent
+    ScheduleFormComponent,
+    DaypickerComponent
   ],
   imports: [
     BrowserModule,

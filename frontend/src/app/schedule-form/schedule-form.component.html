@@ -3,14 +3,25 @@
   <form>
     <div class="form-group">
       <label for="frequency">Frequency</label>
-      <select [(ngModel)]="schedule.recurrence.frequency" id="frequency" name="frequency" class="form-control">
+      <select [(ngModel)]="schedule.recurrence.frequency"
+              id="frequency" name="frequency"
+              class="form-control">
         <option *ngFor="let freq of frequencies" [value]="freq">{{freq}}</option>
       </select>
     </div>
     <div class="form-group">
       <label for="interval">Interval</label>
-      <input [(ngModel)]="schedule.recurrence.interval" class="form-control" id="interval" type="text" name="interval">
+      <input [(ngModel)]="schedule.recurrence.interval"
+            id="interval" name="interval"
+            class="form-control" type="text">
     </div>
-  <button type="submit" class="btn btn-success">Submit</button>
+    <div class="form-group">
+        <label for="count">Count</label>
+        <input [(ngModel)]="schedule.recurrence.count"
+              id="count" name="count"
+              class="form-control" type="number">
+    </div>
+    <app-daypicker [selectedDays]="schedule.recurrence.schedule.weekDays" (changed)="dayschanged($event)"></app-daypicker>
+    <button type="submit" class="btn btn-success">Submit</button>
   </form>
 </div>

@@ -12,6 +12,10 @@ export class ScheduleFormComponent implements OnInit {
 
   @Input() schedule: Schedule;
 
+  dayschanged(days: string[]) {
+    this.schedule.recurrence.schedule.weekDays = days;
+  }
+
   constructor() { }
 
   ngOnInit() {

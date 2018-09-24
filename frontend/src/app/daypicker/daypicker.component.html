@@ -1,0 +1,11 @@
+<div>
+  <ul>
+    <li *ngFor="let day of days">
+      <input #checkbox type="checkbox"
+            name="day.name" value="day.name"
+            [checked]="day.checked"
+            (change)="onchange(day.name, checkbox.checked)"
+      > {{day.name}}
+    </li>
+  </ul>
+</div>

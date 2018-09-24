@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class ScheduleService {
 
-  private schedulesUrl = '';
+  private schedulesUrl = 'https://4upebzjb0ytd3f8pi39iwlqz.azurewebsites.net/api/getschedulerjob';
 
   constructor(
     private logMessageService: LogMessageService,
