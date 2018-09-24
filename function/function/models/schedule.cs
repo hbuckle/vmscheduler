@@ -9,24 +9,24 @@ namespace function
 {
   public class Schedule
   {
-    public String Id { get; set; }
-    public String Name { get; set; }
-    public JobRecurrence Recurrence { get; set; }
-    public ScheduleMessage Message { get; set; }
+    public String id { get; set; }
+    public String name { get; set; }
+    public JobRecurrence recurrence { get; set; }
+    public ScheduleMessage message { get; set; }
   }
   public class ScheduleMessage
   {
     [JsonProperty(Required = Required.Always)]
-    public String Action { get; set; }
+    public String action { get; set; }
 
     [JsonProperty(Required = Required.Always)]
-    public IEnumerable<String> ResourceGroupIds { get; set; }
+    public IEnumerable<String> resourceGroupIds { get; set; }
 
     [JsonProperty(Required = Required.Always)]
-    public IEnumerable<String> VirtualMachineIds { get; set; }
+    public IEnumerable<String> virtualMachineIds { get; set; }
 
     [JsonProperty(Required = Required.Always)]
-    public IEnumerable<String> Tags { get; set; }
+    public IEnumerable<String> tags { get; set; }
 
     public String ToBase64JsonString()
     {
@@ -37,10 +37,10 @@ namespace function
 
     public void BlankMessage()
     {
-      this.Action = "None";
-      this.ResourceGroupIds = new List<String>();
-      this.VirtualMachineIds = new List<String>();
-      this.Tags = new List<String>();
+      this.action = "None";
+      this.resourceGroupIds = new List<String>();
+      this.virtualMachineIds = new List<String>();
+      this.tags = new List<String>();
     }
   }
 }

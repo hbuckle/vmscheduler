@@ -61,8 +61,8 @@ namespace function
         schedulerManagementClient.SubscriptionId = parsed.SubscriptionId;
         var definition = CreateJobDefinition(
           config["queue_scheduler"],
-          schedule.Message.ToBase64JsonString(),
-          schedule.Recurrence
+          schedule.message.ToBase64JsonString(),
+          schedule.recurrence
         );
         schedulerManagementClient.Jobs.CreateOrUpdate(
           parsed.ResourceGroupName,

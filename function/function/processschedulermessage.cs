@@ -23,19 +23,19 @@ namespace function
       try {
         log.LogInformation(xml);
         var scheduleMessage = Methods.ConvertSchedulerXml(xml);
-        log.LogInformation(scheduleMessage.Action);
+        log.LogInformation(scheduleMessage.action);
         List<String> vms = new List<string>();
-        foreach (String resourceGroupId in scheduleMessage.ResourceGroupIds)
+        foreach (String resourceGroupId in scheduleMessage.resourceGroupIds)
         {
           log.LogInformation(resourceGroupId);
           vms.AddRange(Methods.GetResourceGroupVms(resourceGroupId));
         }
-        foreach (String vmId in scheduleMessage.VirtualMachineIds)
+        foreach (String vmId in scheduleMessage.virtualMachineIds)
         {
           log.LogInformation(vmId);
           vms.Add(vmId);
         }
-        switch (scheduleMessage.Action.ToLower())
+        switch (scheduleMessage.action.ToLower())
         {
           case "start":
             foreach (String vm in vms)

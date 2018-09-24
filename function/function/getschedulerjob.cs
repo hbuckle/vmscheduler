@@ -76,9 +76,17 @@ namespace function
           {
             Id = job.Id,
             Name = job.Name.Split('/')[1],
-            Recurrence = job.Properties.Recurrence,
             Message = scheduleMessage
           };
+          if (job.Properties.Recurrence == null)
+          {
+            schedule.Recurrence = new Microsoft.Azure.Management.Scheduler.Models.JobRecurrence();
+            schedule.Recurrence.Schedule = new Microsoft.Azure.Management.Scheduler.Models.JobRecurrenceSchedule();
+          }
+          else
+          {
+            schedule.Recurrence = job.Properties.Recurrence;
+          }
           result.Add(schedule);
         }
         return (ActionResult)new JsonResult(result);
