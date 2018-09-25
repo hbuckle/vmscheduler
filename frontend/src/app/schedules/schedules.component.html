@@ -13,4 +13,8 @@
                       (submitted)="formsubmitted($event)">
     </app-schedule-form>
   </section>
+  <section>
+    <input #newname type="text">
+    <button type="button" (click)="addnew(newname.value)">Add</button>
+  </section>
 </div>

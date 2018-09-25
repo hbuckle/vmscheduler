@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Schedule } from '../schedule';
 import { ScheduleService } from '../schedule.service';
+import { JobRecurrence } from '../jobrecurrence';
+import { JobRecurrenceSchedule } from '../jobrecurrenceschedule';
+import { ScheduleMessage } from '../schedulemessage';
 
 @Component({
   selector: 'app-schedules',
@@ -18,6 +21,20 @@ export class SchedulesComponent implements OnInit {
   getSchedules(): void {
     this.scheduleService.getSchedules()
       .subscribe(schedules => this.schedules = schedules);
+  }
+
+  addnew(name: string): void {
+    var newschedule = new Schedule(
+      null, name, null, null
+      // new JobRecurrence(null, null, null, null,
+      //   new JobRecurrenceSchedule(null, null, null, null, null)),
+      //   new ScheduleMessage("none", [], [], [])
+    );
+    this.scheduleService.createUpdateSchedule(newschedule)
+      .subscribe(() => {
+        this.schedules.concat(newschedule);
+        this.selectedSchedule = newschedule;
+      });
   }
 
   onSelect(schedule: Schedule): void {
