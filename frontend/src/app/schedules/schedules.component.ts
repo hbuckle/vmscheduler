@@ -28,4 +28,12 @@ export class SchedulesComponent implements OnInit {
     this.getSchedules();
   }
 
+  formsubmitted(submitted: boolean) {
+    if (submitted) {
+      console.log('schedules.component.formsubmitted');
+      this.scheduleService.createUpdateSchedule(this.selectedSchedule)
+        .subscribe(() => this.selectedSchedule = null);
+    }
+  }
+
 }

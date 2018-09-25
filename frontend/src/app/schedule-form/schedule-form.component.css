@@ -1,0 +1,19 @@
+.form-group ul {
+  list-style-type: none;
+}
+.form-group section {
+  display: -webkit-flex;
+  display: flex;
+}
+.list-hours {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  padding: 10px;
+}
+.list-minutes {
+  -webkit-flex: 3;
+  -ms-flex: 3;
+  flex: 3;
+  padding: 10px;
+}

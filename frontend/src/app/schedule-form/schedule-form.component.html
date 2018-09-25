@@ -1,6 +1,6 @@
 <div *ngIf="schedule" class="container">
   <h2>Editing {{schedule.name}}</h2>
-  <form>
+  <form (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="frequency">Frequency</label>
       <select [(ngModel)]="schedule.recurrence.frequency"
@@ -22,6 +22,22 @@
               class="form-control" type="number">
     </div>
     <app-daypicker [selectedDays]="schedule.recurrence.schedule.weekDays" (changed)="dayschanged($event)"></app-daypicker>
+    <div class="form-group">
+      <section>
+        <ul class="list-hours">
+          <li *ngFor="let hour of schedule.recurrence.schedule.hours; let i = index">
+            <input id="hours-{{i}}" name="hours-{{i}}" type="number"
+                  [(ngModel)]="schedule.recurrence.schedule.hours[i]">
+          </li>
+        </ul>
+        <ul class="list-minutes">
+          <li *ngFor="let minute of schedule.recurrence.schedule.minutes; let i = index">
+            <input id="minutes-{{i}}" name="minutes-{{i}}" type="number"
+                  [(ngModel)]="schedule.recurrence.schedule.minutes[i]">
+          </li>
+        </ul>
+      </section>
+    </div>
     <button type="submit" class="btn btn-success">Submit</button>
   </form>
 </div>

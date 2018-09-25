@@ -8,6 +8,9 @@
         <span class="badge">{{schedule.name}}</span><span> {{schedule.message.action}}</span>
       </li>
     </ul>
-    <app-schedule-form class="app-schedule-detail" [schedule]="selectedSchedule"></app-schedule-form>
+    <app-schedule-form class="app-schedule-detail"
+                      [schedule]="selectedSchedule"
+                      (submitted)="formsubmitted($event)">
+    </app-schedule-form>
   </section>
 </div>
