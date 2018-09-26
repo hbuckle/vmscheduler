@@ -37,6 +37,11 @@
           </li>
         </ul>
       </section>
+      <section>
+        <input #hoursnew id="hours-new" name="hours-new" type="number">
+        <input #minutesnew id="minutes-new" name="minutes-new" type="number">
+        <button type="button" (click)="addTime(hoursnew.value, minutesnew.value)">Add Time</button>
+      </section>
     </div>
     <button type="submit" class="btn btn-success">Submit</button>
   </form>

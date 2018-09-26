@@ -19,6 +19,7 @@ export class SchedulesComponent implements OnInit {
   constructor(private scheduleService: ScheduleService) { }
 
   getSchedules(): void {
+    this.schedules = [];
     this.scheduleService.getSchedules()
       .subscribe(schedules => this.schedules = schedules);
   }

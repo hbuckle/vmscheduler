@@ -31,6 +31,11 @@ export class ScheduleService {
     return this.http.get<Schedule[]>(this.getschedulerjobUrl());
   }
 
+  private sanitiseSchedule(schedule: Schedule): Schedule {
+    // TODO replace empty arrays with nulls and remove conflicting properties
+    return schedule;
+  }
+
   createUpdateSchedule(schedule: Schedule): Observable<any> {
     console.log(schedule);
     return this.http.put(this.createupdateschedulerjobUrl(schedule.name), schedule, httpOptions).pipe(
