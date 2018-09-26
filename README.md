@@ -1,10 +1,18 @@
-vmscheduler
+vmscheduler (under construction)
 ===========
+
+# Overview
+
+An application (and learning project) for scheduling virtual machines in
+Azure.
+
+The backend consists of Azure Scheduler, Queue Storage and Functions with
+an Angular frontend to manage schedules.
 
 # Development
 ```
 choco install dotnetcore-sdk
-choco install azure-functions-core-tools --pre
+choco install azure-functions-core-tools
 ```
 
 ## Azure Functions Core Tools

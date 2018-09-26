@@ -25,16 +25,12 @@ export class SchedulesComponent implements OnInit {
 
   addnew(name: string): void {
     var newschedule = new Schedule(
-      null, name, null, null
-      // new JobRecurrence(null, null, null, null,
-      //   new JobRecurrenceSchedule(null, null, null, null, null)),
-      //   new ScheduleMessage("none", [], [], [])
+      null, name,
+      new JobRecurrence(null, null, null, null,
+        new JobRecurrenceSchedule(null, null, null, null, null)),
+        new ScheduleMessage("none", [], [], [])
     );
-    this.scheduleService.createUpdateSchedule(newschedule)
-      .subscribe(() => {
-        this.schedules.concat(newschedule);
-        this.selectedSchedule = newschedule;
-      });
+    this.selectedSchedule = newschedule;
   }
 
   onSelect(schedule: Schedule): void {
@@ -49,7 +45,11 @@ export class SchedulesComponent implements OnInit {
     if (submitted) {
       console.log('schedules.component.formsubmitted');
       this.scheduleService.createUpdateSchedule(this.selectedSchedule)
-        .subscribe(() => this.selectedSchedule = null);
+        .subscribe(
+          () => {
+            this.selectedSchedule = null;
+            this.getSchedules();
+          });
     }
   }
 
