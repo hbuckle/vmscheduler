@@ -43,6 +43,9 @@
         <button type="button" (click)="addTime(hoursnew.value, minutesnew.value)">Add Time</button>
       </section>
     </div>
+    <app-listswapper [listalpha]="schedule.message.resourceGroupIds"
+                      [listomega]="resourceGroups">
+    </app-listswapper>
     <button type="submit" class="btn btn-success">Submit</button>
   </form>
 </div>

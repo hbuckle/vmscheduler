@@ -1,0 +1,16 @@
+<div class="listswapper">
+  <section>
+    <ul>
+      <li *ngFor="let alpha of listalpha">
+        <span class="badge" draggable="true">{{alpha}}</span>
+      </li>
+    </ul>
+  </section>
+  <section>
+    <ul>
+      <li *ngFor="let omega of listomega">
+        <span class="badge" draggable="true">{{omega | resourcename}}</span>
+      </li>
+    </ul>
+  </section>
+</div>

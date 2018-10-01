@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Schedule } from '../schedule';
+import { ResourcesService } from '../resources.service';
 
 @Component({
   selector: 'app-schedule-form',
@@ -9,6 +10,7 @@ import { Schedule } from '../schedule';
 export class ScheduleFormComponent implements OnInit {
 
   frequencies = ['Minute', 'Hour', 'Day', 'Week', 'Month']
+  resourceGroups: string[];
 
   @Input() schedule: Schedule;
   @Output() submitted = new EventEmitter<boolean>();
@@ -19,6 +21,12 @@ export class ScheduleFormComponent implements OnInit {
 
   onSubmit() {
     this.submitted.emit(true);
+  }
+
+  getResources(): void {
+    this.resourceGroups = [];
+    this.resourcesService.getResourceGroups()
+      .subscribe(rgs => this.resourceGroups = rgs);
   }
 
   addTime(hour: number, minute: number) {
@@ -36,9 +44,10 @@ export class ScheduleFormComponent implements OnInit {
     this.schedule.recurrence.schedule.minutes = newminutes;
   }
 
-  constructor() { }
+  constructor(private resourcesService: ResourcesService) { }
 
   ngOnInit() {
+    this.getResources();
   }
 
 }
