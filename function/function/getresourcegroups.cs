@@ -28,12 +28,7 @@ namespace function
             .Authenticate(credentials)
             .WithDefaultSubscription();
       var result = azure.ResourceGroups.List()
-        .Select(rg => new
-        {
-          Name = rg.Name,
-          Id = rg.Id
-        }
-      );
+        .Select(rg => rg.Id);
       return (ActionResult)new JsonResult(result);
     }
   }
