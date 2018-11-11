@@ -21,6 +21,7 @@ export class ScheduleFormComponent implements OnInit {
 
   onSubmit() {
     this.submitted.emit(true);
+    this.getResources();
   }
 
   getResources(): void {

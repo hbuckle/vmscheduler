@@ -43,9 +43,16 @@
         <button type="button" (click)="addTime(hoursnew.value, minutesnew.value)">Add Time</button>
       </section>
     </div>
-    <app-listswapper [listalpha]="schedule.message.resourceGroupIds"
-                      [listomega]="resourceGroups">
-    </app-listswapper>
+    <ul dragula="RESOURCEGROUPS" [(dragulaModel)]="schedule.message.resourceGroupIds">
+      <li *ngFor="let item of schedule.message.resourceGroupIds">
+        {{item}}
+      </li>
+    </ul>
+    <ul dragula="RESOURCEGROUPS" [(dragulaModel)]="resourceGroups">
+      <li *ngFor="let item of resourceGroups">
+        {{item | resourcename}}
+      </li>
+    </ul>
     <button type="submit" class="btn btn-success">Submit</button>
   </form>
 </div>

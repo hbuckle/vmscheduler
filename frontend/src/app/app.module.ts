@@ -9,8 +9,8 @@ import { LogMessagesComponent } from './logmessages/logmessages.component';
 import { ScheduleDetailComponent } from './schedule-detail/schedule-detail.component';
 import { ScheduleFormComponent } from './schedule-form/schedule-form.component';
 import { DaypickerComponent } from './daypicker/daypicker.component';
-import { ListswapperComponent } from './listswapper/listswapper.component';
 import { ResourcenamePipe } from './resourcename.pipe';
+import { DragulaModule } from 'ng2-dragula';
 
 @NgModule({
   declarations: [
@@ -20,13 +20,13 @@ import { ResourcenamePipe } from './resourcename.pipe';
     ScheduleDetailComponent,
     ScheduleFormComponent,
     DaypickerComponent,
-    ListswapperComponent,
     ResourcenamePipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    DragulaModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
